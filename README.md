@@ -1,26 +1,28 @@
-# Kalendarz dni wolnych 2026 (HTML)
+# Kalendarz urlopów 2026 — nowoczesny widok HTML
 
-To jest prosta aplikacja **HTML + JavaScript** (bez backendu), która:
-- pokazuje dni wolne od pracy w 2026 r. dla: Hiszpanii (ES), Portugalii (PT), Indonezji (ID), Polski (PL),
-- pozwala dodawać użytkowników,
-- pozwala dodawać urlopy,
-- pozwala dodawać własne dni wolne.
+Aplikacja działa w przeglądarce i pokazuje **miesięczny widok kalendarza**, gdzie od razu widać:
+- święta kraju (PL / ES / PT / ID),
+- niestandardowe dni wolne,
+- urlopy użytkowników (kto i kiedy).
 
-## Jak uruchomić
+## Uruchomienie
 
-### Opcja 1 (najprościej)
-1. Otwórz plik `index.html` w przeglądarce (dwuklik).
+### 1) Najprościej
+Otwórz `index.html` bezpośrednio w przeglądarce.
 
-### Opcja 2 (lokalny serwer)
-W folderze projektu uruchom:
-
+### 2) Lokalny serwer (polecane)
 ```bash
 python3 -m http.server 8000
 ```
-
-Następnie wejdź w przeglądarce na:
-
+Następnie otwórz:
 - `http://localhost:8000`
 
-## Gdzie zapisywane są dane?
-Dane użytkowników/urlopów/dodatkowych dni wolnych zapisują się w `localStorage` przeglądarki.
+## Funkcje
+- Dodawanie użytkowników.
+- Dodawanie urlopów z zakresem dat.
+- Dodawanie własnych dni wolnych.
+- Przełączanie miesiąca (styczeń–grudzień 2026).
+- Zmiana kraju świąt.
+
+## Gdzie zapisują się dane?
+Dane trzymane są w `localStorage` przeglądarki (lokalnie na Twoim komputerze).
