@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalendarz dni wolnych 2026</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; background:#f6f8fb; color:#1a1a1a; }
+    h1,h2 { margin-bottom: 8px; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:16px; }
+    .card { background:#fff; border:1px solid #dde3ec; border-radius:10px; padding:14px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+    label { display:block; margin-top:8px; font-size:14px; }
+    input, select, button { width:100%; padding:8px; margin-top:4px; border-radius:8px; border:1px solid #cbd5e1; }
+    button { cursor:pointer; background:#2563eb; border:none; color:#fff; font-weight:600; margin-top:10px; }
+    button:hover { background:#1d4ed8; }
+    ul { padding-left:18px; }
+    .muted { color:#5c6675; font-size:13px; }
+  </style>
+</head>
+<body>
+  <h1>Kalendarz dni wolnych – 2026</h1>
+  <p class="muted">Kraje: Hiszpania (ES), Portugalia (PT), Indonezja (ID), Polska (PL).</p>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Dni wolne</h2>
+      <label for="countrySelect">Kraj</label>
+      <select id="countrySelect">
+        <option value="ES">Hiszpania (ES)</option>
+        <option value="PT">Portugalia (PT)</option>
+        <option value="ID">Indonezja (ID)</option>
+        <option value="PL">Polska (PL)</option>
+      </select>
+      <ul id="holidayList"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Użytkownicy</h2>
+      <label for="userName">Nazwa użytkownika</label>
+      <input id="userName" placeholder="np. Jan Kowalski" />
+      <button id="addUserBtn">Dodaj użytkownika</button>
+      <ul id="usersList"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Urlopy</h2>
+      <label for="vacationUser">Użytkownik</label>
+      <select id="vacationUser"></select>
+      <label for="vacationStart">Data od</label>
+      <input id="vacationStart" type="date" />
+      <label for="vacationEnd">Data do</label>
+      <input id="vacationEnd" type="date" />
+      <label for="vacationReason">Powód</label>
+      <input id="vacationReason" placeholder="urlop" />
+      <button id="addVacationBtn">Dodaj urlop</button>
+      <ul id="vacationsList"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Niestandardowe dni wolne</h2>
+      <label for="customDate">Data</label>
+      <input id="customDate" type="date" />
+      <label for="customName">Nazwa</label>
+      <input id="customName" placeholder="np. Dzień firmowy" />
+      <button id="addCustomBtn">Dodaj dzień wolny</button>
+      <ul id="customDaysList"></ul>
+    </section>
+  </div>
+
+  <script>
+    const HOLIDAYS_2026 = {
+      PL: {"2026-01-01":"Nowy Rok","2026-01-06":"Trzech Króli","2026-04-05":"Wielkanoc","2026-04-06":"Poniedziałek Wielkanocny","2026-05-01":"Święto Pracy","2026-05-03":"Święto Konstytucji 3 Maja","2026-05-24":"Zielone Świątki","2026-06-04":"Boże Ciało","2026-08-15":"Wniebowzięcie NMP","2026-11-01":"Wszystkich Świętych","2026-11-11":"Narodowe Święto Niepodległości","2026-12-25":"Boże Narodzenie (1. dzień)","2026-12-26":"Boże Narodzenie (2. dzień)"},
+      ES: {"2026-01-01":"Año Nuevo","2026-01-06":"Epifanía del Señor","2026-04-03":"Viernes Santo","2026-05-01":"Fiesta del Trabajo","2026-08-15":"Asunción de la Virgen","2026-10-12":"Fiesta Nacional de España","2026-11-01":"Todos los Santos","2026-12-06":"Día de la Constitución","2026-12-08":"Inmaculada Concepción","2026-12-25":"Navidad"},
+      PT: {"2026-01-01":"Ano Novo","2026-04-03":"Sexta-feira Santa","2026-04-05":"Páscoa","2026-04-25":"Dia da Liberdade","2026-05-01":"Dia do Trabalhador","2026-06-10":"Dia de Portugal","2026-06-11":"Corpo de Deus","2026-08-15":"Assunção de Nossa Senhora","2026-10-05":"Implantação da República","2026-11-01":"Dia de Todos os Santos","2026-12-01":"Restauração da Independência","2026-12-08":"Imaculada Conceição","2026-12-25":"Natal"},
+      ID: {"2026-01-01":"Tahun Baru Masehi","2026-01-16":"Isra Mikraj","2026-02-17":"Tahun Baru Imlek","2026-03-19":"Hari Suci Nyepi","2026-03-20":"Nyepi Cuti Bersama","2026-04-03":"Wafat Yesus Kristus","2026-05-14":"Kenaikan Yesus Kristus","2026-05-27":"Hari Raya Waisak","2026-05-28":"Waisak Cuti Bersama","2026-06-01":"Hari Lahir Pancasila","2026-07-17":"Tahun Baru Islam","2026-08-17":"Hari Kemerdekaan","2026-09-24":"Maulid Nabi Muhammad","2026-12-25":"Hari Raya Natal"}
+    };
+
+    const state = JSON.parse(localStorage.getItem('calendar_state') || '{"users":[],"vacations":[],"customDays":[]}');
+
+    function save() { localStorage.setItem('calendar_state', JSON.stringify(state)); }
+
+    function renderHolidays() {
+      const country = document.getElementById('countrySelect').value;
+      const list = document.getElementById('holidayList');
+      list.innerHTML = '';
+      Object.entries(HOLIDAYS_2026[country]).sort().forEach(([day, name]) => {
+        const li = document.createElement('li');
+        li.textContent = `${day}: ${name}`;
+        list.appendChild(li);
+      });
+    }
+
+    function renderUsers() {
+      const usersList = document.getElementById('usersList');
+      const vacationUser = document.getElementById('vacationUser');
+      usersList.innerHTML = '';
+      vacationUser.innerHTML = '';
+      state.users.forEach(u => {
+        const li = document.createElement('li');
+        li.textContent = `#${u.id} ${u.name}`;
+        usersList.appendChild(li);
+
+        const option = document.createElement('option');
+        option.value = u.id;
+        option.textContent = `#${u.id} ${u.name}`;
+        vacationUser.appendChild(option);
+      });
+    }
+
+    function renderVacations() {
+      const vacationsList = document.getElementById('vacationsList');
+      vacationsList.innerHTML = '';
+      state.vacations.forEach(v => {
+        const user = state.users.find(u => u.id === v.userId);
+        const li = document.createElement('li');
+        li.textContent = `${user ? user.name : 'Nieznany'}: ${v.start} → ${v.end} (${v.reason})`;
+        vacationsList.appendChild(li);
+      });
+    }
+
+    function renderCustomDays() {
+      const customDaysList = document.getElementById('customDaysList');
+      customDaysList.innerHTML = '';
+      state.customDays.forEach(d => {
+        const li = document.createElement('li');
+        li.textContent = `${d.date}: ${d.name}`;
+        customDaysList.appendChild(li);
+      });
+    }
+
+    document.getElementById('countrySelect').addEventListener('change', renderHolidays);
+
+    document.getElementById('addUserBtn').addEventListener('click', () => {
+      const name = document.getElementById('userName').value.trim();
+      if (!name) return alert('Podaj nazwę użytkownika.');
+      const nextId = state.users.length ? Math.max(...state.users.map(u => u.id)) + 1 : 1;
+      state.users.push({ id: nextId, name });
+      document.getElementById('userName').value = '';
+      save(); renderUsers();
+    });
+
+    document.getElementById('addVacationBtn').addEventListener('click', () => {
+      const userId = Number(document.getElementById('vacationUser').value);
+      const start = document.getElementById('vacationStart').value;
+      const end = document.getElementById('vacationEnd').value;
+      const reason = document.getElementById('vacationReason').value.trim() || 'urlop';
+      if (!userId || !start || !end) return alert('Wybierz użytkownika i daty.');
+      if (start > end) return alert('Data końcowa nie może być wcześniejsza niż początkowa.');
+      state.vacations.push({ userId, start, end, reason });
+      document.getElementById('vacationStart').value = '';
+      document.getElementById('vacationEnd').value = '';
+      document.getElementById('vacationReason').value = '';
+      save(); renderVacations();
+    });
+
+    document.getElementById('addCustomBtn').addEventListener('click', () => {
+      const date = document.getElementById('customDate').value;
+      const name = document.getElementById('customName').value.trim();
+      if (!date || !name) return alert('Podaj datę i nazwę dnia wolnego.');
+      state.customDays.push({ date, name });
+      document.getElementById('customDate').value = '';
+      document.getElementById('customName').value = '';
+      save(); renderCustomDays();
+    });
+
+    renderHolidays();
+    renderUsers();
+    renderVacations();
+    renderCustomDays();
+  </script>
+</body>
+</html>
