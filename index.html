@@ -3,204 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UNIT4-style Team Calendar 2026</title>
+  <title>Kalendarz urlopów 2026</title>
   <style>
-    :root {
-      --bg: #f6f7fb;
-      --surface: #ffffff;
-      --surface-2: #f2f4ff;
-      --text: #1b2141;
-      --muted: #636b8c;
-      --primary: #5f3bff;
-      --primary-2: #7d61ff;
-      --border: #e3e7f5;
-      --holiday: #ef4444;
-      --custom: #f59e0b;
-      --vac: #10b981;
-      --radius: 14px;
+    :root{
+      --bg:#f3f3f3; --text:#05070d; --muted:#60636d; --line:#e1e1e1;
+      --green:#7dbb42; --green-dark:#5ea021; --black:#050505; --white:#fff;
+      --holiday:#ffd9d9; --vac:#dff6d5; --custom:#ffecc6;
     }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family: Inter, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); }
-    .container { max-width: 1500px; margin: 24px auto; padding: 0 16px 24px; }
-    .head { margin-bottom: 16px; }
-    .title { margin: 0 0 6px; font-size: 2rem; color: #10153a; }
-    .subtitle { margin: 0; color: var(--muted); }
-    .layout { display: grid; grid-template-columns: 360px 1fr; gap: 16px; }
-    .panel { background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); box-shadow: 0 8px 24px rgba(36,50,93,.08); padding: 14px; }
-    h2 { margin: 0 0 8px; font-size: 1.05rem; }
-    label { display:block; margin-top:8px; color: var(--muted); font-size: .88rem; }
-    input, select, button { width:100%; padding:10px; margin-top:4px; border-radius:10px; border:1px solid var(--border); background:#fff; color:var(--text); }
-    button { cursor:pointer; border:none; font-weight:700; background: linear-gradient(135deg, var(--primary), var(--primary-2)); color:#fff; }
-
-    .list { margin:8px 0 0; padding-left:18px; max-height: 140px; overflow:auto; }
-    .topbar { display:flex; flex-wrap: wrap; gap:8px; align-items:center; margin-bottom:12px; }
-    .monthLabel { flex:1; text-align:center; font-weight:700; min-width:140px; }
-    .miniBtn { width:auto; padding:8px 12px; }
-    .viewSwitch { display:flex; gap:8px; }
-    .chip {
-      width:auto; padding:8px 12px; border:1px solid var(--border); background:var(--surface-2); color:#394268;
-      border-radius:999px; font-weight:700;
-    }
-    .chip.active { background: #ece8ff; border-color: #cfc3ff; color: #3d2bb6; }
-
-    .weekdays, .grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:8px; }
-    .weekday { font-size:.82rem; color: var(--muted); text-align:center; }
-    .day {
-      min-height: 114px; border:1px solid var(--border); border-radius:12px; background:#fff; padding:8px;
-      display:flex; flex-direction:column; gap:5px; overflow:hidden;
-    }
-    .day.outside { background:#fafbff; opacity:.65; }
-    .day.holiday { border-color: #ffcdcd; }
-    .dayNumber { font-size:.88rem; font-weight:700; }
-    .tag { font-size:.7rem; border-radius:999px; width:fit-content; padding:2px 7px; white-space:nowrap; }
-    .tag.holiday { background:#ffe6e6; color:#8e1f1f; }
-    .tag.custom { background:#ffefcd; color:#865500; }
-    .tag.vac { background:#dcfce7; color:#116439; }
-
-    .yearGrid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:10px; }
-    .monthCard { border:1px solid var(--border); border-radius:12px; padding:8px; background:#fff; }
-    .monthTitle { font-size:.85rem; font-weight:700; margin-bottom:6px; color:#2d3661; }
-    .miniMonth { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:3px; }
-    .miniCell { min-height:22px; border-radius:6px; text-align:center; font-size:.63rem; line-height:22px; border:1px solid transparent; position:relative; }
-    .miniCell.off { color:#a3aac7; }
-    .miniCell.holiday { background:#ffe6e6; border-color:#ffcdcd; }
-    .miniCell.vac { background:#dcfce7; border-color:#bbf7d0; font-weight:700; }
-    .miniCell.custom { outline:1px solid #ffd088; }
-    .miniCell .dot { position:absolute; right:2px; bottom:2px; width:5px; height:5px; border-radius:50%; background:#f59e0b; }
-
-    .legend { margin-top:10px; color:var(--muted); font-size:.85rem; display:flex; gap:16px; flex-wrap:wrap; }
-    .legend span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
-    .l-holiday::before{ background:var(--holiday);} .l-custom::before{ background:var(--custom);} .l-vac::before{ background:var(--vac);} 
-
-    .icon { margin-right:6px; }
-    @media (max-width:1180px){ .layout { grid-template-columns:1fr; } .yearGrid { grid-template-columns: repeat(2,minmax(0,1fr)); }}
-    @media (max-width:720px){ .yearGrid { grid-template-columns:1fr; }}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .topStrip{height:46px;background:#e9e9e9;border-bottom:1px solid #ddd;display:flex;justify-content:flex-end;align-items:center;padding:0 32px;gap:24px;color:#222}
+    .nav{height:84px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 64px}
+    .logo{font-size:48px;letter-spacing:2px;font-weight:800}.menu{display:flex;gap:40px;font-size:33px}.cta{background:var(--green);color:#111;padding:16px 34px;border-radius:999px;font-weight:700}
+    .hero{max-width:1500px;margin:28px auto;padding:0 24px;display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:start}
+    .hero h1{font-size:64px;line-height:1.05;margin:10px 0 16px}.hero p{font-size:28px;line-height:1.35;color:#222;max-width:780px}
+    .actions{display:flex;gap:16px;flex-wrap:wrap;margin:22px 0}.btn{border:none;border-radius:999px;padding:18px 34px;font-size:24px;font-weight:800;cursor:pointer}
+    .btn.green{background:var(--green)} .btn.black{background:var(--black);color:#fff}
+    .panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
+    .formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    input,select,button{padding:11px;border-radius:12px;border:1px solid #d9d9d9;font-size:16px} button{background:#111;color:#fff;border:none;font-weight:700}
+    .switch{display:flex;gap:8px;margin:10px 0 14px}.chip{padding:10px 14px;border-radius:999px;border:1px solid #ccc;background:#fff;cursor:pointer;font-weight:700}.chip.active{background:#111;color:#fff}
+    .toolbar{display:flex;gap:8px;align-items:center}.toolbar .label{flex:1;text-align:center;font-weight:700}
+    .week,.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}.w{text-align:center;color:#666;font-size:12px}.d{min-height:90px;background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:6px;font-size:12px}
+    .d.o{opacity:.45}.t{display:inline-block;padding:2px 6px;border-radius:999px;font-size:11px;margin-top:4px}.h{background:var(--holiday)}.v{background:var(--vac)}.c{background:var(--custom)}
+    .year{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.mc{border:1px solid #e5e5e5;border-radius:10px;padding:6px}.mt{font-weight:700;font-size:12px;margin-bottom:4px}.mini{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}.m{height:18px;text-align:center;font-size:10px;border-radius:5px;line-height:18px}
+    .m.h{background:var(--holiday)}.m.v{background:var(--vac)}.m.c{outline:1px solid #f2b84a}
+    ul{margin:8px 0;padding-left:18px;max-height:110px;overflow:auto}
+    @media (max-width:1200px){.hero{grid-template-columns:1fr}.menu{display:none}.logo{font-size:34px}.hero h1{font-size:44px}.hero p{font-size:20px}.year{grid-template-columns:repeat(2,minmax(0,1fr));}}
   </style>
 </head>
 <body>
-  <div class="container">
-    <header class="head">
-      <h1 class="title">📆 Kalendarz urlopów 2026</h1>
-      <p class="subtitle">Przełączaj widok miesięczny / roczny i sprawdzaj święta oraz urlopy zespołu.</p>
-    </header>
+  <div class="topStrip"><span>🔎 Search</span><span>🌐 English</span><span>Log in</span></div>
+  <div class="nav"><div class="logo">unit4</div><div class="menu"><span>Products</span><span>Industries</span><span>Resources</span><span>Why Unit4?</span></div><div class="cta">Talk to Sales</div></div>
 
-    <div class="layout">
-      <aside class="panel">
-        <h2><span class="icon">⚙️</span>Ustawienia</h2>
-        <label for="countrySelect">Kraj świąt (2026)</label>
-        <select id="countrySelect"><option value="PL">Polska</option><option value="ES">Hiszpania</option><option value="PT">Portugalia</option><option value="ID">Indonezja</option></select>
+  <section class="hero">
+    <div>
+      <h1>Look to the future<br>with Team Vacation Planning</h1>
+      <p>Nowy widok kalendarza 2026 w podobnym look & feel: jasne tło, mocna typografia, zielone CTA, czytelny podział i szybki przełącznik między widokiem miesięcznym i rocznym.</p>
+      <div class="actions"><button class="btn green">Watch demo</button><button class="btn black">Read planning eBook</button></div>
 
-        <h2 style="margin-top:14px"><span class="icon">👤</span>Dodaj użytkownika</h2>
-        <input id="userName" placeholder="np. Anna Kowalska" /><button id="addUserBtn">Dodaj użytkownika</button><ul id="usersList" class="list"></ul>
-
-        <h2 style="margin-top:14px"><span class="icon">🏖️</span>Dodaj urlop</h2>
-        <select id="vacationUser"></select><input id="vacationStart" type="date" /><input id="vacationEnd" type="date" /><input id="vacationReason" placeholder="np. Wakacje" /><button id="addVacationBtn">Dodaj urlop</button><ul id="vacationsList" class="list"></ul>
-
-        <h2 style="margin-top:14px"><span class="icon">✨</span>Dodaj dzień wolny</h2>
-        <input id="customDate" type="date" /><input id="customName" placeholder="np. Dzień firmowy" /><button id="addCustomBtn">Dodaj dzień wolny</button><ul id="customDaysList" class="list"></ul>
-      </aside>
-
-      <main class="panel">
-        <div class="topbar">
-          <button id="prevMonth" class="miniBtn">← Poprzedni</button>
-          <div id="monthLabel" class="monthLabel"></div>
-          <button id="nextMonth" class="miniBtn">Następny →</button>
-          <div class="viewSwitch">
-            <button id="monthlyViewBtn" class="chip active">Widok miesięczny</button>
-            <button id="yearlyViewBtn" class="chip">Widok roczny</button>
+      <div class="panel">
+        <h3>Dodaj dane</h3>
+        <div class="formgrid">
+          <div><label>Kraj świąt</label><select id="country"><option value="PL">Polska</option><option value="ES">Hiszpania</option><option value="PT">Portugalia</option><option value="ID">Indonezja</option></select></div>
+          <div><label>Użytkownik</label><input id="uname" placeholder="np. Jan Kowalski"/></div>
+          <div><button id="addUser">Dodaj użytkownika</button><ul id="users"></ul></div>
+          <div>
+            <label>Urlop (od/do)</label><select id="vuser"></select><input id="vs" type="date"/><input id="ve" type="date"/><input id="vr" placeholder="powód"/><button id="addVac">Dodaj urlop</button><ul id="vlist"></ul>
           </div>
+          <div><label>Dzień wolny</label><input id="cd" type="date"/><input id="cn" placeholder="nazwa"/><button id="addCustom">Dodaj dzień</button><ul id="clist"></ul></div>
         </div>
-
-        <section id="monthlyView">
-          <div class="weekdays"><div class="weekday">Pon</div><div class="weekday">Wt</div><div class="weekday">Śr</div><div class="weekday">Czw</div><div class="weekday">Pt</div><div class="weekday">Sob</div><div class="weekday">Nd</div></div>
-          <div id="calendarGrid" class="grid"></div>
-        </section>
-
-        <section id="yearlyView" style="display:none;">
-          <div id="yearGrid" class="yearGrid"></div>
-        </section>
-
-        <div class="legend"><span class="l-vac">Urlop</span><span class="l-holiday">Święto</span><span class="l-custom">Dzień niestandardowy</span></div>
-      </main>
+      </div>
     </div>
-  </div>
 
-  <script>
-    const HOLIDAYS_2026 = {PL:{"2026-01-01":"Nowy Rok","2026-01-06":"Trzech Króli","2026-04-05":"Wielkanoc","2026-04-06":"Poniedziałek Wielkanocny","2026-05-01":"Święto Pracy","2026-05-03":"Święto Konstytucji 3 Maja","2026-05-24":"Zielone Świątki","2026-06-04":"Boże Ciało","2026-08-15":"Wniebowzięcie NMP","2026-11-01":"Wszystkich Świętych","2026-11-11":"Narodowe Święto Niepodległości","2026-12-25":"Boże Narodzenie (1. dzień)","2026-12-26":"Boże Narodzenie (2. dzień)"},ES:{"2026-01-01":"Año Nuevo","2026-01-06":"Epifanía del Señor","2026-04-03":"Viernes Santo","2026-05-01":"Fiesta del Trabajo","2026-08-15":"Asunción de la Virgen","2026-10-12":"Fiesta Nacional de España","2026-11-01":"Todos los Santos","2026-12-06":"Día de la Constitución","2026-12-08":"Inmaculada Concepción","2026-12-25":"Navidad"},PT:{"2026-01-01":"Ano Novo","2026-04-03":"Sexta-feira Santa","2026-04-05":"Páscoa","2026-04-25":"Dia da Liberdade","2026-05-01":"Dia do Trabalhador","2026-06-10":"Dia de Portugal","2026-06-11":"Corpo de Deus","2026-08-15":"Assunção de Nossa Senhora","2026-10-05":"Implantação da República","2026-11-01":"Dia de Todos os Santos","2026-12-01":"Restauração da Independência","2026-12-08":"Imaculada Conceição","2026-12-25":"Natal"},ID:{"2026-01-01":"Tahun Baru Masehi","2026-01-16":"Isra Mikraj","2026-02-17":"Tahun Baru Imlek","2026-03-19":"Hari Suci Nyepi","2026-03-20":"Nyepi Cuti Bersama","2026-04-03":"Wafat Yesus Kristus","2026-05-14":"Kenaikan Yesus Kristus","2026-05-27":"Hari Raya Waisak","2026-05-28":"Waisak Cuti Bersama","2026-06-01":"Hari Lahir Pancasila","2026-07-17":"Tahun Baru Islam","2026-08-17":"Hari Kemerdekaan","2026-09-24":"Maulid Nabi Muhammad","2026-12-25":"Hari Raya Natal"}};
-    const state = JSON.parse(localStorage.getItem('calendar_state') || '{"users":[],"vacations":[],"customDays":[]}');
-    let currentMonth = 0; let currentView = 'month';
-    const monthNames = ["Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień"];
-    const save = () => localStorage.setItem('calendar_state', JSON.stringify(state));
-    const dayToIso = (y,m,d) => `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const hasVacation = iso => state.vacations.some(v => iso >= v.start && iso <= v.end);
-    const getVacationNamesForDate = iso => state.vacations.filter(v => iso >= v.start && iso <= v.end).map(v => state.users.find(u => u.id === v.userId)?.name || 'Nieznany');
+    <div class="panel">
+      <div class="switch"><button id="mBtn" class="chip active">Widok miesięczny</button><button id="yBtn" class="chip">Widok roczny</button></div>
+      <div class="toolbar"><button id="prev">←</button><div id="label" class="label"></div><button id="next">→</button></div>
+      <div id="monthWrap"><div class="week"><div class="w">Pon</div><div class="w">Wt</div><div class="w">Śr</div><div class="w">Czw</div><div class="w">Pt</div><div class="w">Sob</div><div class="w">Nd</div></div><div id="grid" class="grid"></div></div>
+      <div id="yearWrap" style="display:none"><div id="year" class="year"></div></div>
+    </div>
+  </section>
 
-    function setView(view) {
-      currentView = view;
-      document.getElementById('monthlyView').style.display = view === 'month' ? 'block' : 'none';
-      document.getElementById('yearlyView').style.display = view === 'year' ? 'block' : 'none';
-      document.getElementById('monthlyViewBtn').classList.toggle('active', view === 'month');
-      document.getElementById('yearlyViewBtn').classList.toggle('active', view === 'year');
-      document.getElementById('prevMonth').style.visibility = view === 'month' ? 'visible' : 'hidden';
-      document.getElementById('nextMonth').style.visibility = view === 'month' ? 'visible' : 'hidden';
-      document.getElementById('monthLabel').textContent = view === 'month' ? `${monthNames[currentMonth]} 2026` : 'Rok 2026';
-    }
-
-    function renderMonthly() {
-      const grid = document.getElementById('calendarGrid'); const country = document.getElementById('countrySelect').value; const holidays = HOLIDAYS_2026[country] || {};
-      grid.innerHTML = '';
-      const firstDay = new Date(2026, currentMonth, 1); const first = (firstDay.getDay() + 6) % 7; const daysInMonth = new Date(2026, currentMonth+1, 0).getDate(); const prev = new Date(2026,currentMonth,0).getDate();
-      for (let i=0;i<42;i++) {
-        const cell = document.createElement('div'); cell.className = 'day'; let d, m=currentMonth, outside=false;
-        if (i<first) { d = prev-first+i+1; m=currentMonth-1; outside=true; } else if (i>=first+daysInMonth) { d=i-(first+daysInMonth)+1; m=currentMonth+1; outside=true; } else { d=i-first+1; }
-        if (m<0) m=11; if (m>11) m=0; const iso = dayToIso(2026,m,d);
-        if (outside) cell.classList.add('outside'); if (holidays[iso]) cell.classList.add('holiday');
-        cell.innerHTML = `<div class="dayNumber">${d}</div>`;
-        if (holidays[iso]) cell.insertAdjacentHTML('beforeend', `<div class="tag holiday">${holidays[iso]}</div>`);
-        state.customDays.filter(c=>c.date===iso).forEach(c=>cell.insertAdjacentHTML('beforeend', `<div class="tag custom">${c.name}</div>`));
-        getVacationNamesForDate(iso).forEach(name=>cell.insertAdjacentHTML('beforeend', `<div class="tag vac">Urlop: ${name}</div>`));
-        grid.appendChild(cell);
-      }
-    }
-
-    function renderYearly() {
-      const wrap = document.getElementById('yearGrid'); const country = document.getElementById('countrySelect').value; const holidays = HOLIDAYS_2026[country] || {};
-      wrap.innerHTML = '';
-      for (let month = 0; month < 12; month++) {
-        const card = document.createElement('div'); card.className = 'monthCard';
-        card.innerHTML = `<div class='monthTitle'>${monthNames[month]}</div><div class='miniMonth' id='m-${month}'></div>`;
-        wrap.appendChild(card);
-        const mini = card.querySelector('.miniMonth');
-        const first = (new Date(2026, month, 1).getDay() + 6) % 7; const days = new Date(2026, month+1, 0).getDate();
-        for (let i=0;i<42;i++) {
-          const c = document.createElement('div'); c.className = 'miniCell';
-          if (i < first || i >= first+days) { c.classList.add('off'); mini.appendChild(c); continue; }
-          const day = i-first+1; const iso = dayToIso(2026,month,day); c.textContent = day;
-          if (holidays[iso]) c.classList.add('holiday'); if (hasVacation(iso)) c.classList.add('vac');
-          if (state.customDays.some(x=>x.date===iso)) { c.classList.add('custom'); c.insertAdjacentHTML('beforeend', `<span class='dot'></span>`); }
-          const names = getVacationNamesForDate(iso); const tip = [holidays[iso] ? `Święto: ${holidays[iso]}` : '', ...names.map(n=>`Urlop: ${n}`), ...state.customDays.filter(x=>x.date===iso).map(x=>`Dzień wolny: ${x.name}`)].filter(Boolean).join('\n');
-          if (tip) c.title = tip;
-          mini.appendChild(c);
-        }
-      }
-    }
-
-    function renderUsers(){ const ul=document.getElementById('usersList'); const sel=document.getElementById('vacationUser'); ul.innerHTML=''; sel.innerHTML=''; state.users.forEach(u=>{ul.insertAdjacentHTML('beforeend',`<li>#${u.id} ${u.name}</li>`); sel.insertAdjacentHTML('beforeend',`<option value='${u.id}'>#${u.id} ${u.name}</option>`);}); }
-    function renderVacations(){ const ul=document.getElementById('vacationsList'); ul.innerHTML=''; state.vacations.forEach(v=>{const u=state.users.find(x=>x.id===v.userId)?.name||'Nieznany'; ul.insertAdjacentHTML('beforeend',`<li>${u}: ${v.start} → ${v.end} (${v.reason||'urlop'})</li>`);}); }
-    function renderCustomDays(){ const ul=document.getElementById('customDaysList'); ul.innerHTML=''; state.customDays.forEach(c=>ul.insertAdjacentHTML('beforeend',`<li>${c.date}: ${c.name}</li>`)); }
-    function renderAll(){ renderMonthly(); renderYearly(); setView(currentView); }
-
-    document.getElementById('countrySelect').addEventListener('change', renderAll);
-    document.getElementById('prevMonth').addEventListener('click', ()=>{ currentMonth=(currentMonth+11)%12; renderAll(); });
-    document.getElementById('nextMonth').addEventListener('click', ()=>{ currentMonth=(currentMonth+1)%12; renderAll(); });
-    document.getElementById('monthlyViewBtn').addEventListener('click', ()=>setView('month'));
-    document.getElementById('yearlyViewBtn').addEventListener('click', ()=>setView('year'));
-
-    document.getElementById('addUserBtn').addEventListener('click', ()=>{ const name=document.getElementById('userName').value.trim(); if(!name) return alert('Podaj nazwę użytkownika.'); const id=state.users.length?Math.max(...state.users.map(u=>u.id))+1:1; state.users.push({id,name}); document.getElementById('userName').value=''; save(); renderUsers(); renderAll(); });
-    document.getElementById('addVacationBtn').addEventListener('click', ()=>{ const userId=Number(document.getElementById('vacationUser').value); const start=document.getElementById('vacationStart').value; const end=document.getElementById('vacationEnd').value; const reason=document.getElementById('vacationReason').value.trim()||'urlop'; if(!userId||!start||!end) return alert('Wybierz użytkownika i daty.'); if(start>end) return alert('Data końcowa nie może być wcześniejsza niż początkowa.'); state.vacations.push({userId,start,end,reason}); document.getElementById('vacationStart').value=''; document.getElementById('vacationEnd').value=''; document.getElementById('vacationReason').value=''; save(); renderVacations(); renderAll(); });
-    document.getElementById('addCustomBtn').addEventListener('click', ()=>{ const date=document.getElementById('customDate').value; const name=document.getElementById('customName').value.trim(); if(!date||!name) return alert('Podaj datę i nazwę dnia wolnego.'); state.customDays.push({date,name}); document.getElementById('customDate').value=''; document.getElementById('customName').value=''; save(); renderCustomDays(); renderAll(); });
-
-    renderUsers(); renderVacations(); renderCustomDays(); renderAll();
-  </script>
-</body>
-</html>
+<script>
+const H={PL:{"2026-01-01":"Nowy Rok","2026-01-06":"Trzech Króli","2026-04-05":"Wielkanoc","2026-04-06":"Poniedziałek Wielkanocny","2026-05-01":"Święto Pracy","2026-05-03":"Święto Konstytucji 3 Maja","2026-05-24":"Zielone Świątki","2026-06-04":"Boże Ciało","2026-08-15":"Wniebowzięcie NMP","2026-11-01":"Wszystkich Świętych","2026-11-11":"Narodowe Święto Niepodległości","2026-12-25":"Boże Narodzenie (1. dzień)","2026-12-26":"Boże Narodzenie (2. dzień)"},ES:{"2026-01-01":"Año Nuevo","2026-01-06":"Epifanía del Señor","2026-04-03":"Viernes Santo","2026-05-01":"Fiesta del Trabajo","2026-08-15":"Asunción de la Virgen","2026-10-12":"Fiesta Nacional de España","2026-11-01":"Todos los Santos","2026-12-06":"Día de la Constitución","2026-12-08":"Inmaculada Concepción","2026-12-25":"Navidad"},PT:{"2026-01-01":"Ano Novo","2026-04-03":"Sexta-feira Santa","2026-04-05":"Páscoa","2026-04-25":"Dia da Liberdade","2026-05-01":"Dia do Trabalhador","2026-06-10":"Dia de Portugal","2026-06-11":"Corpo de Deus","2026-08-15":"Assunção de Nossa Senhora","2026-10-05":"Implantação da República","2026-11-01":"Dia de Todos os Santos","2026-12-01":"Restauração da Independência","2026-12-08":"Imaculada Conceição","2026-12-25":"Natal"},ID:{"2026-01-01":"Tahun Baru Masehi","2026-01-16":"Isra Mikraj","2026-02-17":"Tahun Baru Imlek","2026-03-19":"Hari Suci Nyepi","2026-03-20":"Nyepi Cuti Bersama","2026-04-03":"Wafat Yesus Kristus","2026-05-14":"Kenaikan Yesus Kristus","2026-05-27":"Hari Raya Waisak","2026-05-28":"Waisak Cuti Bersama","2026-06-01":"Hari Lahir Pancasila","2026-07-17":"Tahun Baru Islam","2026-08-17":"Hari Kemerdekaan","2026-09-24":"Maulid Nabi Muhammad","2026-12-25":"Hari Raya Natal"}};
+const S=JSON.parse(localStorage.getItem('calendar_state')||'{"users":[],"vacations":[],"customDays":[]}'); let m=0,v='m'; const M=["Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień"]; const iso=(y,mm,d)=>`${y}-${String(mm+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; const save=()=>localStorage.setItem('calendar_state',JSON.stringify(S));
+const vacNames=d=>S.vacations.filter(x=>d>=x.start&&d<=x.end).map(x=>S.users.find(u=>u.id===x.userId)?.name||'Nieznany');
+function renderMonth(){const g=document.getElementById('grid'),c=document.getElementById('country').value,h=H[c]||{};g.innerHTML='';document.getElementById('label').textContent=`${M[m]} 2026`;const f=(new Date(2026,m,1).getDay()+6)%7,days=new Date(2026,m+1,0).getDate(),p=new Date(2026,m,0).getDate();for(let i=0;i<42;i++){const x=document.createElement('div');x.className='d';let d,mm=m,o=false;if(i<f){d=p-f+i+1;mm=m-1;o=true}else if(i>=f+days){d=i-(f+days)+1;mm=m+1;o=true}else d=i-f+1;if(mm<0)mm=11;if(mm>11)mm=0;const day=iso(2026,mm,d);if(o)x.classList.add('o');x.innerHTML=`<div><b>${d}</b></div>`;if(h[day])x.innerHTML+=`<div class='t h'>${h[day]}</div>`;S.customDays.filter(z=>z.date===day).forEach(z=>x.innerHTML+=`<div class='t c'>${z.name}</div>`);vacNames(day).forEach(n=>x.innerHTML+=`<div class='t v'>Urlop: ${n}</div>`);g.appendChild(x)}}
+function renderYear(){const y=document.getElementById('year'),c=document.getElementById('country').value,h=H[c]||{};y.innerHTML='';for(let mm=0;mm<12;mm++){const card=document.createElement('div');card.className='mc';card.innerHTML=`<div class='mt'>${M[mm]}</div><div class='mini' id='mi${mm}'></div>`;y.appendChild(card);const mi=card.querySelector('.mini'),f=(new Date(2026,mm,1).getDay()+6)%7,days=new Date(2026,mm+1,0).getDate();for(let i=0;i<42;i++){const el=document.createElement('div');el.className='m';if(i<f||i>=f+days){mi.appendChild(el);continue}const d=i-f+1,day=iso(2026,mm,d);el.textContent=d;if(h[day])el.classList.add('h');if(vacNames(day).length)el.classList.add('v');if(S.customDays.some(z=>z.date===day))el.classList.add('c');mi.appendChild(el)}}}
+function renderUsers(){const ul=document.getElementById('users'),sel=document.getElementById('vuser');ul.innerHTML='';sel.innerHTML='';S.users.forEach(u=>{ul.innerHTML+=`<li>#${u.id} ${u.name}</li>`;sel.innerHTML+=`<option value='${u.id}'>#${u.id} ${u.name}</option>`})}
+function renderVac(){const ul=document.getElementById('vlist');ul.innerHTML='';S.vacations.forEach(x=>{const n=S.users.find(u=>u.id===x.userId)?.name||'Nieznany';ul.innerHTML+=`<li>${n}: ${x.start} → ${x.end} (${x.reason||'urlop'})</li>`})}
+function renderCustom(){const ul=document.getElementById('clist');ul.innerHTML='';S.customDays.forEach(x=>ul.innerHTML+=`<li>${x.date}: ${x.name}</li>`)}
+function setV(n){v=n;document.getElementById('mBtn').classList.toggle('active',n==='m');document.getElementById('yBtn').classList.toggle('active',n==='y');document.getElementById('monthWrap').style.display=n==='m'?'block':'none';document.getElementById('yearWrap').style.display=n==='y'?'block':'none';document.getElementById('prev').style.visibility=n==='m'?'visible':'hidden';document.getElementById('next').style.visibility=n==='m'?'visible':'hidden';document.getElementById('label').textContent=n==='m'?`${M[m]} 2026`:'Rok 2026';}
+function all(){renderMonth();renderYear();setV(v)}
+document.getElementById('country').onchange=all;document.getElementById('prev').onclick=()=>{m=(m+11)%12;all()};document.getElementById('next').onclick=()=>{m=(m+1)%12;all()};document.getElementById('mBtn').onclick=()=>setV('m');document.getElementById('yBtn').onclick=()=>setV('y');
+document.getElementById('addUser').onclick=()=>{const name=document.getElementById('uname').value.trim();if(!name)return alert('Podaj nazwę użytkownika');const id=S.users.length?Math.max(...S.users.map(u=>u.id))+1:1;S.users.push({id,name});document.getElementById('uname').value='';save();renderUsers();all()};
+document.getElementById('addVac').onclick=()=>{const userId=Number(document.getElementById('vuser').value),start=document.getElementById('vs').value,end=document.getElementById('ve').value,reason=document.getElementById('vr').value.trim()||'urlop';if(!userId||!start||!end)return alert('Wybierz dane');if(start>end)return alert('Błędny zakres');S.vacations.push({userId,start,end,reason});document.getElementById('vs').value='';document.getElementById('ve').value='';document.getElementById('vr').value='';save();renderVac();all()};
+document.getElementById('addCustom').onclick=()=>{const date=document.getElementById('cd').value,name=document.getElementById('cn').value.trim();if(!date||!name)return alert('Podaj datę i nazwę');S.customDays.push({date,name});document.getElementById('cd').value='';document.getElementById('cn').value='';save();renderCustom();all()};
+renderUsers();renderVac();renderCustom();all();
+</script>
+</body></html>
