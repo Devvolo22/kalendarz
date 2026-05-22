@@ -1,9 +1,8 @@
-# Kalendarz urlopów 2026 — nowoczesny widok HTML
+# Kalendarz urlopów 2026 — widok miesięczny + roczny
 
-Aplikacja działa w przeglądarce i pokazuje **miesięczny widok kalendarza**, gdzie od razu widać:
-- święta kraju (PL / ES / PT / ID),
-- niestandardowe dni wolne,
-- urlopy użytkowników (kto i kiedy).
+Aplikacja działa w przeglądarce i ma dwa tryby widoku:
+- **Widok miesięczny** (szczegóły dnia + etykiety urlopów/świąt),
+- **Widok roczny** (12 miesięcy naraz, z zaznaczonymi urlopami i świętami).
 
 ## Uruchomienie
 
@@ -18,11 +17,14 @@ Następnie otwórz:
 - `http://localhost:8000`
 
 ## Funkcje
-- Dodawanie użytkowników.
-- Dodawanie urlopów z zakresem dat.
-- Dodawanie własnych dni wolnych.
-- Przełączanie miesiąca (styczeń–grudzień 2026).
-- Zmiana kraju świąt.
+- Przełącznik: **widok miesięczny / roczny**.
+- Urlopy są widoczne w obu widokach.
+- Święta kraju (PL/ES/PT/ID) są widoczne w obu widokach.
+- Niestandardowe dni wolne są widoczne w obu widokach.
+- Dodawanie użytkowników, urlopów i dni wolnych.
+
+## Styl UI
+Interfejs jest utrzymany w nowoczesnym stylu enterprise (fioletowe akcenty, jasne panele, ikony, czytelna legenda).
 
 ## Gdzie zapisują się dane?
 Dane trzymane są w `localStorage` przeglądarki (lokalnie na Twoim komputerze).
